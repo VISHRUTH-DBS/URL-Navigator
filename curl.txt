@@ -1,0 +1,999 @@
+curl "https://www.google.com"
+
+curl "https://www.bing.com"
+
+curl "https://search.brave.com"
+
+curl "https://duckduckgo.com"
+
+curl "https://www.yahoo.com"
+
+curl "https://www.ecosia.org"
+
+curl "https://www.qwant.com"
+
+curl "https://www.baidu.com"
+
+curl "https://www.yandex.com"
+
+curl "https://www.startpage.com"
+
+curl "https://www.searx.space"
+
+curl "https://www.kagi.com"
+
+curl "https://www.perplexity.ai"
+
+curl "https://chatgpt.com"
+
+curl "https://claude.ai"
+
+curl "https://gemini.google.com"
+
+curl "https://copilot.microsoft.com"
+
+curl "https://www.anthropic.com"
+
+curl "https://openai.com"
+
+curl "https://huggingface.co"
+
+curl "https://www.midjourney.com"
+
+curl "https://www.replicate.com"
+
+curl "https://www.cohere.com"
+
+curl "https://www.mistral.ai"
+
+curl "https://www.elevenlabs.io"
+
+curl "https://www.runwayml.com"
+
+curl "https://www.sora.com"
+
+curl "https://www.deepmind.com"
+
+curl "https://www.facebook.com"
+
+curl "https://www.instagram.com"
+
+curl "https://www.linkedin.com"
+
+curl "https://www.reddit.com"
+
+curl "https://www.pinterest.com"
+
+curl "https://www.tiktok.com"
+
+curl "https://discord.com"
+
+curl "https://web.whatsapp.com"
+
+curl "https://telegram.org"
+
+curl "https://x.com"
+
+curl "https://www.threads.net"
+
+curl "https://bsky.app"
+
+curl "https://mastodon.social"
+
+curl "https://www.tumblr.com"
+
+curl "https://www.quora.com"
+
+curl "https://medium.com"
+
+curl "https://www.snapchat.com"
+
+curl "https://www.twitch.tv"
+
+curl "https://kick.com"
+
+curl "https://www.vk.com"
+
+curl "https://www.wechat.com"
+
+curl "https://line.me"
+
+curl "https://www.viber.com"
+
+curl "https://nextdoor.com"
+
+curl "https://www.patreon.com"
+
+curl "https://substack.com"
+
+curl "https://www.signal.org"
+
+curl "https://www.element.io"
+
+curl "https://matrix.org"
+
+curl "https://www.keybase.io"
+
+curl "https://www.mixcloud.com"
+
+curl "https://www.discourse.org"
+
+curl "https://www.youtube.com"
+
+curl "https://www.netflix.com"
+
+curl "https://www.primevideo.com"
+
+curl "https://vimeo.com"
+
+curl "https://www.dailymotion.com"
+
+curl "https://www.youtube.com/shorts"
+
+curl "https://www.hulu.com"
+
+curl "https://www.disneyplus.com"
+
+curl "https://www.max.com"
+
+curl "https://tv.apple.com"
+
+curl "https://www.paramountplus.com"
+
+curl "https://www.peacocktv.com"
+
+curl "https://www.crunchyroll.com"
+
+curl "https://rumble.com"
+
+curl "https://pluto.tv"
+
+curl "https://tubitv.com"
+
+curl "https://mubi.com"
+
+curl "https://curiositystream.com"
+
+curl "https://nebula.tv"
+
+curl "https://www.iqiyi.com"
+
+curl "https://www.viki.com"
+
+curl "https://www.spotify.com"
+
+curl "https://music.apple.com"
+
+curl "https://soundcloud.com"
+
+curl "https://www.deezer.com"
+
+curl "https://tidal.com"
+
+curl "https://bandcamp.com"
+
+curl "https://www.pandora.com"
+
+curl "https://music.amazon.com"
+
+curl "https://www.last.fm"
+
+curl "https://audiomack.com"
+
+curl "https://www.iheart.com"
+
+curl "https://tunein.com"
+
+curl "https://www.shazam.com"
+
+curl "https://www.genius.com"
+
+curl "https://www.coursera.org"
+
+curl "https://www.udemy.com"
+
+curl "https://www.edx.org"
+
+curl "https://www.khanacademy.org"
+
+curl "https://www.codecademy.com"
+
+curl "https://www.freecodecamp.org"
+
+curl "https://www.w3schools.com"
+
+curl "https://www.geeksforgeeks.org"
+
+curl "https://ocw.mit.edu"
+
+curl "https://www.udacity.com"
+
+curl "https://www.pluralsight.com"
+
+curl "https://www.datacamp.com"
+
+curl "https://leetcode.com"
+
+curl "https://www.hackerrank.com"
+
+curl "https://www.hackerearth.com"
+
+curl "https://www.brilliant.org"
+
+curl "https://www.skillshare.com"
+
+curl "https://www.masterclass.com"
+
+curl "https://www.duolingo.com"
+
+curl "https://www.memrise.com"
+
+curl "https://www.babbel.com"
+
+curl "https://quizlet.com"
+
+curl "https://www.chegg.com"
+
+curl "https://www.researchgate.net"
+
+curl "https://www.academia.edu"
+
+curl "https://www.sciencedirect.com"
+
+curl "https://www.springer.com"
+
+curl "https://www.nature.com"
+
+curl "https://www.sciencemag.org"
+
+curl "https://arxiv.org"
+
+curl "https://pubmed.ncbi.nlm.nih.gov"
+
+curl "https://www.jstor.org"
+
+curl "https://www.futurelearn.com"
+
+curl "https://www.alison.com"
+
+curl "https://www.treehouse.com"
+
+curl "https://www.scrimba.com"
+
+curl "https://www.sololearn.com"
+
+curl "https://www.codewars.com"
+
+curl "https://topcoder.com"
+
+curl "https://codeforces.com"
+
+curl "https://www.kaggle.com"
+
+curl "https://stackoverflow.com"
+
+curl "https://github.com"
+
+curl "https://gitlab.com"
+
+curl "https://bitbucket.org"
+
+curl "https://developer.mozilla.org"
+
+curl "https://www.python.org"
+
+curl "https://www.java.com"
+
+curl "https://nodejs.org"
+
+curl "https://react.dev"
+
+curl "https://www.tensorflow.org"
+
+curl "https://pytorch.org"
+
+curl "https://vuejs.org"
+
+curl "https://angular.io"
+
+curl "https://svelte.dev"
+
+curl "https://nextjs.org"
+
+curl "https://nuxt.com"
+
+curl "https://gatsbyjs.com"
+
+curl "https://tailwindcss.com"
+
+curl "https://getbootstrap.com"
+
+curl "https://www.typescriptlang.org"
+
+curl "https://rust-lang.org"
+
+curl "https://go.dev"
+
+curl "https://www.ruby-lang.org"
+
+curl "https://www.php.net"
+
+curl "https://swift.org"
+
+curl "https://kotlinlang.org"
+
+curl "https://dart.dev"
+
+curl "https://flutter.dev"
+
+curl "https://reactnative.dev"
+
+curl "https://pypi.org"
+
+curl "https://www.npmjs.com"
+
+curl "https://crates.io"
+
+curl "https://rubygems.org"
+
+curl "https://packagist.org"
+
+curl "https://hub.docker.com"
+
+curl "https://www.terraform.io"
+
+curl "https://kubernetes.io"
+
+curl "https://www.ansible.com"
+
+curl "https://www.jenkins.io"
+
+curl "https://circleci.com"
+
+curl "https://travis-ci.org"
+
+curl "https://www.datadoghq.com"
+
+curl "https://sentry.io"
+
+curl "https://newrelic.com"
+
+curl "https://www.postman.com"
+
+curl "https://vercel.com"
+
+curl "https://www.netlify.com"
+
+curl "https://render.com"
+
+curl "https://fly.io"
+
+curl "https://www.heroku.com"
+
+curl "https://aws.amazon.com"
+
+curl "https://cloud.google.com"
+
+curl "https://azure.microsoft.com"
+
+curl "https://www.digitalocean.com"
+
+curl "https://www.linode.com"
+
+curl "https://www.hetzner.com"
+
+curl "https://www.cloudflare.com"
+
+curl "https://www.fastly.com"
+
+curl "https://www.akamai.com"
+
+curl "https://dev.to"
+
+curl "https://hashnode.com"
+
+curl "https://codepen.io"
+
+curl "https://replit.com"
+
+curl "https://glitch.com"
+
+curl "https://jsfiddle.net"
+
+curl "https://stackblitz.com"
+
+curl "https://codesandbox.io"
+
+curl "https://en.wikipedia.org"
+
+curl "https://www.britannica.com"
+
+curl "https://archive.org"
+
+curl "https://scholar.google.com"
+
+curl "https://www.wolframalpha.com"
+
+curl "https://www.dictionary.com"
+
+curl "https://www.thesaurus.com"
+
+curl "https://www.merriam-webster.com"
+
+curl "https://www.urbandictionary.com"
+
+curl "https://plato.stanford.edu"
+
+curl "https://www.wikihow.com"
+
+curl "https://www.howstuffworks.com"
+
+curl "https://www.snopes.com"
+
+curl "https://www.factcheck.org"
+
+curl "https://www.politifact.com"
+
+curl "https://www.imdb.com"
+
+curl "https://www.rottentomatoes.com"
+
+curl "https://www.themoviedb.org"
+
+curl "https://www.metacritic.com"
+
+curl "https://www.justwatch.com"
+
+curl "https://www.fandango.com"
+
+curl "https://www.letterboxd.com"
+
+curl "https://www.goodreads.com"
+
+curl "https://www.allmusic.com"
+
+curl "https://www.discogs.com"
+
+curl "https://www.google.com/maps"
+
+curl "https://maps.apple.com"
+
+curl "https://www.openstreetmap.org"
+
+curl "https://www.tripadvisor.com"
+
+curl "https://www.booking.com"
+
+curl "https://www.airbnb.com"
+
+curl "https://www.skyscanner.com"
+
+curl "https://www.google.com/travel"
+
+curl "https://www.expedia.com"
+
+curl "https://www.kayak.com"
+
+curl "https://www.trivago.com"
+
+curl "https://www.hotels.com"
+
+curl "https://www.vrbo.com"
+
+curl "https://www.agoda.com"
+
+curl "https://www.hostelworld.com"
+
+curl "https://www.uber.com"
+
+curl "https://www.lyft.com"
+
+curl "https://www.grab.com"
+
+curl "https://www.hertz.com"
+
+curl "https://www.avis.com"
+
+curl "https://www.flightradar24.com"
+
+curl "https://www.seatguru.com"
+
+curl "https://www.rome2rio.com"
+
+curl "https://www.viator.com"
+
+curl "https://www.getyourguide.com"
+
+curl "https://www.cruisecritic.com"
+
+curl "https://images.google.com"
+
+curl "https://unsplash.com"
+
+curl "https://www.pexels.com"
+
+curl "https://pixabay.com"
+
+curl "https://www.flickr.com"
+
+curl "https://www.canva.com"
+
+curl "https://www.behance.net"
+
+curl "https://dribbble.com"
+
+curl "https://www.deviantart.com"
+
+curl "https://www.artstation.com"
+
+curl "https://www.freepik.com"
+
+curl "https://www.iconfinder.com"
+
+curl "https://www.flaticon.com"
+
+curl "https://fonts.google.com"
+
+curl "https://fonts.adobe.com"
+
+curl "https://www.sketch.com"
+
+curl "https://www.invisionapp.com"
+
+curl "https://www.framer.com"
+
+curl "https://webflow.com"
+
+curl "https://www.figma.com"
+
+curl "https://www.shutterstock.com"
+
+curl "https://www.gettyimages.com"
+
+curl "https://www.istockphoto.com"
+
+curl "https://www.vecteezy.com"
+
+curl "https://www.gimp.org"
+
+curl "https://inkscape.org"
+
+curl "https://krita.org"
+
+curl "https://www.blender.org"
+
+curl "https://www.amazon.com"
+
+curl "https://www.flipkart.com"
+
+curl "https://www.ebay.com"
+
+curl "https://www.etsy.com"
+
+curl "https://www.walmart.com"
+
+curl "https://www.target.com"
+
+curl "https://www.bestbuy.com"
+
+curl "https://www.aliexpress.com"
+
+curl "https://www.alibaba.com"
+
+curl "https://www.taobao.com"
+
+curl "https://www.rakuten.com"
+
+curl "https://www.shopify.com"
+
+curl "https://www.shein.com"
+
+curl "https://www.temu.com"
+
+curl "https://www.asos.com"
+
+curl "https://www.zara.com"
+
+curl "https://www2.hm.com"
+
+curl "https://www.nike.com"
+
+curl "https://www.adidas.com"
+
+curl "https://puma.com"
+
+curl "https://www.ikea.com"
+
+curl "https://www.wayfair.com"
+
+curl "https://www.homedepot.com"
+
+curl "https://www.costco.com"
+
+curl "https://www.lowes.com"
+
+curl "https://www.macys.com"
+
+curl "https://www.nordstrom.com"
+
+curl "https://www.overstock.com"
+
+curl "https://www.wish.com"
+
+curl "https://www.mercadolibre.com"
+
+curl "https://www.shopee.com"
+
+curl "https://www.lazada.com"
+
+curl "https://www.zalando.com"
+
+curl "https://www.chewy.com"
+
+curl "https://www.bhphotovideo.com"
+
+curl "https://www.newegg.com"
+
+curl "https://www.microsoft.com"
+
+curl "https://www.apple.com"
+
+curl "https://www.ibm.com"
+
+curl "https://www.oracle.com"
+
+curl "https://www.adobe.com"
+
+curl "https://www.nvidia.com"
+
+curl "https://www.tesla.com"
+
+curl "https://www.samsung.com"
+
+curl "https://www.sony.com"
+
+curl "https://www.intel.com"
+
+curl "https://www.amd.com"
+
+curl "https://www.qualcomm.com"
+
+curl "https://www.cisco.com"
+
+curl "https://www.dell.com"
+
+curl "https://www.hp.com"
+
+curl "https://www.lenovo.com"
+
+curl "https://www.asus.com"
+
+curl "https://www.acer.com"
+
+curl "https://www.logitech.com"
+
+curl "https://www.razer.com"
+
+curl "https://www.corsair.com"
+
+curl "https://www.panasonic.com"
+
+curl "https://www.lg.com"
+
+curl "https://www.siemens.com"
+
+curl "https://www.philips.com"
+
+curl "https://www.nytimes.com"
+
+curl "https://www.bbc.com"
+
+curl "https://www.reuters.com"
+
+curl "https://www.cnn.com"
+
+curl "https://www.theguardian.com"
+
+curl "https://www.washingtonpost.com"
+
+curl "https://www.wsj.com"
+
+curl "https://www.bloomberg.com"
+
+curl "https://www.forbes.com"
+
+curl "https://www.businessinsider.com"
+
+curl "https://techcrunch.com"
+
+curl "https://www.theverge.com"
+
+curl "https://www.wired.com"
+
+curl "https://arstechnica.com"
+
+curl "https://www.engadget.com"
+
+curl "https://mashable.com"
+
+curl "https://www.cnbc.com"
+
+curl "https://www.nbcnews.com"
+
+curl "https://www.cbsnews.com"
+
+curl "https://abcnews.go.com"
+
+curl "https://www.foxnews.com"
+
+curl "https://www.npr.org"
+
+curl "https://apnews.com"
+
+curl "https://time.com"
+
+curl "https://www.newsweek.com"
+
+curl "https://www.ft.com"
+
+curl "https://www.economist.com"
+
+curl "https://www.theatlantic.com"
+
+curl "https://www.newyorker.com"
+
+curl "https://www.vox.com"
+
+curl "https://slate.com"
+
+curl "https://www.politico.com"
+
+curl "https://www.huffpost.com"
+
+curl "https://www.buzzfeed.com"
+
+curl "https://www.dailymail.co.uk"
+
+curl "https://www.telegraph.co.uk"
+
+curl "https://www.independent.co.uk"
+
+curl "https://www.aljazeera.com"
+
+curl "https://www.dw.com"
+
+curl "https://www.france24.com"
+
+curl "https://www.lemonde.fr"
+
+curl "https://www.spiegel.de"
+
+curl "https://www.scmp.com"
+
+curl "https://www.japantimes.co.jp"
+
+curl "https://www.ndtv.com"
+
+curl "https://timesofindia.indiatimes.com"
+
+curl "https://www.thehindu.com"
+
+curl "https://www.sportingnews.com"
+
+curl "https://www.espn.com"
+
+curl "https://www.espncricinfo.com"
+
+curl "https://www.cricbuzz.com"
+
+curl "https://www.fifa.com"
+
+curl "https://www.nba.com"
+
+curl "https://www.nfl.com"
+
+curl "https://www.formula1.com"
+
+curl "https://www.uefa.com"
+
+curl "https://www.olympics.com"
+
+curl "https://www.mlb.com"
+
+curl "https://www.nhl.com"
+
+curl "https://www.wwe.com"
+
+curl "https://www.ufc.com"
+
+curl "https://www.pgatour.com"
+
+curl "https://www.atptour.com"
+
+curl "https://www.wtatennis.com"
+
+curl "https://www.skysports.com"
+
+curl "https://www.eurosport.com"
+
+curl "https://www.bleacherreport.com"
+
+curl "https://www.thescore.com"
+
+curl "https://www.strava.com"
+
+curl "https://www.paypal.com"
+
+curl "https://stripe.com"
+
+curl "https://squareup.com"
+
+curl "https://revolut.com"
+
+curl "https://wise.com"
+
+curl "https://www.coinbase.com"
+
+curl "https://www.binance.com"
+
+curl "https://coinmarketcap.com"
+
+curl "https://www.coingecko.com"
+
+curl "https://www.tradingview.com"
+
+curl "https://finance.yahoo.com"
+
+curl "https://www.marketwatch.com"
+
+curl "https://seekingalpha.com"
+
+curl "https://robinhood.com"
+
+curl "https://www.fidelity.com"
+
+curl "https://investor.vanguard.com"
+
+curl "https://www.schwab.com"
+
+curl "https://www.chase.com"
+
+curl "https://www.bankofamerica.com"
+
+curl "https://www.wellsfargo.com"
+
+curl "https://www.citigroup.com"
+
+curl "https://www.capitalone.com"
+
+curl "https://www.klarna.com"
+
+curl "https://www.afterpay.com"
+
+curl "https://www.venmo.com"
+
+curl "https://www.zellepay.com"
+
+curl "https://www.paxful.com"
+
+curl "https://www.kraken.com"
+
+curl "https://www.gemini.com"
+
+curl "https://www.blockchain.com"
+
+curl "https://store.steampowered.com"
+
+curl "https://store.epicgames.com"
+
+curl "https://www.roblox.com"
+
+curl "https://www.minecraft.net"
+
+curl "https://www.ign.com"
+
+curl "https://www.gamespot.com"
+
+curl "https://kotaku.com"
+
+curl "https://www.polygon.com"
+
+curl "https://www.pcgamer.com"
+
+curl "https://www.eurogamer.net"
+
+curl "https://www.chess.com"
+
+curl "https://lichess.org"
+
+curl "https://www.nexusmods.com"
+
+curl "https://www.speedrun.com"
+
+curl "https://www.hltv.org"
+
+curl "https://op.gg"
+
+curl "https://unity.com"
+
+curl "https://www.unrealengine.com"
+
+curl "https://www.ea.com"
+
+curl "https://www.ubisoft.com"
+
+curl "https://www.blizzard.com"
+
+curl "https://www.nintendo.com"
+
+curl "https://www.playstation.com"
+
+curl "https://www.xbox.com"
+
+curl "https://www.steamcommunity.com"
+
+curl "https://www.gog.com"
+
+curl "https://itch.io"
+
+curl "https://www.humblebundle.com"
+
+curl "https://www.google.com/drive"
+
+curl "https://www.google.com/docs"
+
+curl "https://www.notion.so"
+
+curl "https://trello.com"
+
+curl "https://asana.com"
+
+curl "https://monday.com"
+
+curl "https://clickup.com"
+
+curl "https://www.atlassian.com"
+
+curl "https://slack.com"
+
+curl "https://zoom.us"
+
+curl "https://evernote.com"
+
+curl "https://todoist.com"
+
+curl "https://miro.com"
+
+curl "https://mural.co"
+
+curl "https://www.loom.com"
+
+curl "https://calendly.com"
+
+curl "https://www.typeform.com"
+
+curl "https://www.surveymonkey.com"
+
+curl "https://mailchimp.com"
+
+curl "https://www.hubspot.com"
+
+curl "https://www.salesforce.com"
+
+curl "https://www.zendesk.com"
+
+curl "https://www.intercom.com"
+
+curl "https://www.airtable.com"
+
+curl "https://www.coda.io"
+
+curl "https://www.basecamp.com"
+
+curl "https://www.grammarly.com"
+
+curl "https://www.deepl.com"
+
+curl "https://www.speedtest.net"
+
+curl "https://www.dnschecker.org"

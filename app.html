@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>URL Navigator Chat</title>
+  <link rel="icon" href="icons/icon32.png">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="app">
+    <nav class="rail" aria-label="App bar">
+      <div class="rail-logo" data-icon="logo"></div>
+      <button class="rail-btn active" title="Chat" aria-label="Chat"><span data-icon="chat"></span><small>Chat</small></button>
+      <div class="rail-spacer"></div>
+      <button class="rail-btn" id="btnSettings" title="Settings" aria-label="Settings"><span data-icon="settings"></span><small>Settings</small></button>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+      <header class="sb-head">
+        <h2>Chat</h2>
+        <div class="sb-actions">
+          <button class="icon-btn" id="btnListMenu" title="More options" aria-label="More options" data-icon="more"></button>
+          <button class="icon-btn" id="btnNew" title="New chat" aria-label="New chat" data-icon="compose"></button>
+        </div>
+      </header>
+      <label class="sb-search">
+        <span data-icon="search"></span>
+        <input id="chatSearch" type="search" placeholder="Search chats" autocomplete="off">
+      </label>
+      <div class="sb-label">Recent</div>
+      <ul id="chatList" class="chat-list"></ul>
+    </aside>
+
+    <main class="main">
+      <header class="m-head">
+        <button class="icon-btn only-narrow" id="btnSide" aria-label="Chats" data-icon="menu"></button>
+        <div class="m-av" data-icon="bot"></div>
+        <div class="m-title">
+          <h1 id="chatTitle">New chat</h1>
+          <p id="chatSub">URL Navigator</p>
+        </div>
+        <button class="icon-btn" id="btnChatMenu" title="Chat options" aria-label="Chat options" data-icon="more"></button>
+      </header>
+
+      <section id="messages" class="messages" aria-live="polite"></section>
+
+      <footer class="composer-wrap">
+        <div class="composer">
+          <textarea id="input" rows="1" placeholder="Type a message" aria-label="Message"></textarea>
+          <button id="btnSend" class="send" title="Send" aria-label="Send" data-icon="send"></button>
+        </div>
+        <p class="hint">Enter to send, Shift+Enter for a new line</p>
+      </footer>
+    </main>
+  </div>
+
+  <div id="menu" class="menu" hidden></div>
+  <div id="toast" class="toast" hidden></div>
+
+  <dialog id="dlg"></dialog>
+
+  <dialog id="settingsDlg">
+    <div class="dlg-card wide">
+      <h3>Settings</h3>
+
+      <h4>Chat assistant</h4>
+      <p class="muted">Used for normal conversation. URL features work without a key.</p>
+      <label class="lbl">Provider
+        <select id="setProvider" class="field">
+  <option value="anthropic">Anthropic (Claude)</option>
+  <option value="openai">OpenAI-compatible</option>
+  <option value="groq">Groq</option>
+</select>
+      </label>
+      <label class="lbl">API key
+        <input id="setKey" class="field" type="password" autocomplete="off" placeholder="Paste your API key">
+      </label>
+      <label class="lbl">Model
+        <input id="setModel" class="field" type="text" autocomplete="off">
+      </label>
+      <label class="lbl">Base URL <span class="muted">(optional)</span>
+        <input id="setBase" class="field" type="text" autocomplete="off">
+      </label>
+      <p class="muted small">Your key stays in this browser and is sent directly to the endpoint above. Use your own API key; never share it.</p>
+
+      <h4>URL source</h4>
+      <p id="srcStatus" class="muted"></p>
+      <div class="row">
+        <button type="button" class="btn" id="btnImport">Import curl.txt…</button>
+        <button type="button" class="btn" id="btnBundled">Use bundled file</button>
+        <button type="button" class="btn" id="btnReload">Reload</button>
+      </div>
+      <input type="file" id="fileImport" accept=".txt,text/plain" hidden>
+
+      <div class="dlg-actions">
+        <button type="button" class="btn primary" id="btnSaveSettings">Save</button>
+        <button type="button" class="btn" id="btnCloseSettings">Cancel</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="urlengine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "URL Navigator Chat",
+  "version": "1.0.0",
+  "description": "A Teams-style chatbot that opens websites only from your curl.txt list, and chats like a normal assistant.",
+  "action": { "default_title": "Open URL Navigator Chat" },
+  "background": { "service_worker": "background.js" },
+  "permissions": ["storage", "unlimitedStorage", "favicon"],
+ "host_permissions": [
+  "https://api.anthropic.com/*",
+  "https://api.groq.com/*"
+],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+}
