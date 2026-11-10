@@ -215,6 +215,8 @@
   let activeId = null;
   let settings = { ...DEFAULTS };
   let entries = [];
+  let customCategories = [];
+  let recentUrls = [];
   let source = '';
   let busy = false;
   let abortCtl = null;
@@ -246,10 +248,15 @@
   /* ------------------------------------------------------------ curl.txt source */
 
   async function loadEntries() {
-    const { curlText, curlName } = await browserStore.get([
+    const { curlText, curlName, userCategories, recentUrls: recent } = await browserStore.get([
       'curlText',
-      'curlName'
+      'curlName',
+      'userCategories',
+      'recentUrls'
     ]);
+    customCategories = Array.isArray(userCategories) ? userCategories : [];
+    recentUrls = Array.isArray(recent) ? recent : [];
+    UrlEngine.setCustomCategories(customCategories);
 
     let text = curlText;
 
@@ -269,10 +276,195 @@
       }
     }
 
-    entries = UrlEngine.parseCurl(text);
+    entries = UrlEngine.parseCurl(text).map(entry => ({ ...entry, name: entry.title || entry.name }));
+    const known = new Set(UrlEngine.getCategories().map(cat => cat.id));
+    let addedCategory = false;
+    entries.forEach(entry => {
+      if (entry.categoryId && entry.categoryLabel && !known.has(entry.categoryId)) {
+        customCategories.push({ id: entry.categoryId, label: entry.categoryLabel, key: entry.categoryLabel.toLowerCase(), triggers: [entry.categoryLabel.toLowerCase()], verbs: [], hosts: [] });
+        known.add(entry.categoryId);
+        addedCategory = true;
+      }
+    });
+    if (addedCategory) {
+      UrlEngine.setCustomCategories(customCategories);
+      await browserStore.set({ userCategories: customCategories });
+    }
     updateSubtitle();
 
     return entries;
+  }
+
+  async function saveUrlEntries(nextEntries) {
+    const lines = [];
+    nextEntries.forEach(entry => {
+      if (entry.categoryId) lines.push(`# category: ${entry.categoryId}`);
+      if (entry.categoryLabel) lines.push(`# category-label: ${entry.categoryLabel.replace(/[\r\n]/g, ' ')}`);
+      if (entry.title) lines.push(`# name: ${entry.title.replace(/[\r\n]/g, ' ')}`);
+      if (entry.tags?.length) lines.push(`# tags: ${entry.tags.join(', ').replace(/[\r\n]/g, '')}`);
+      if (entry.favorite) lines.push('# favorite: true');
+      lines.push(`curl "${entry.url}"`, '');
+    });
+    await browserStore.set({ curlText: lines.join('\n'), curlName: 'My URL list' });
+    await loadEntries();
+    renderAll();
+    renderUrlManager();
+  }
+
+  function refreshCategoryControls() {
+    const cats = UrlEngine.getCategories();
+    const add = $('#addUrlCategory');
+    const filter = $('#urlManagerCategory');
+    const addValue = add.value;
+    const filterValue = filter.value;
+    add.innerHTML = '<option value="">Auto-detect category</option>';
+    filter.innerHTML = '<option value="">All categories</option>';
+    cats.forEach(cat => {
+      for (const select of [add, filter]) {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.label;
+        select.append(option);
+      }
+    });
+    add.value = addValue;
+    filter.value = filterValue;
+  }
+
+  function renderUrlManager() {
+    const list = $('#urlManagerList');
+    if (!list) return;
+    refreshCategoryControls();
+    list.innerHTML = '';
+    const query = ($('#urlManagerSearch')?.value || '').trim().toLowerCase();
+    const categoryId = $('#urlManagerCategory')?.value || '';
+    const protocol = $('#urlManagerProtocol')?.value || '';
+    const visible = entries.filter(entry =>
+      (!categoryId || entry.categoryId === categoryId || UrlEngine.getCategories().find(cat => cat.id === categoryId)?.hosts?.some(host => UrlEngine.hostHas(entry, host))) &&
+      (!protocol || new URL(entry.url).protocol === protocol) &&
+      (!query || `${entry.name} ${entry.url} ${entry.host} ${(entry.tags || []).join(' ')}`.toLowerCase().includes(query))
+    );
+    if (!visible.length) {
+      list.innerHTML = '<p class="muted small">No URLs match these filters.</p>';
+      return;
+    }
+    visible.forEach(entry => {
+      const row = document.createElement('div');
+      row.className = 'url-manager-item';
+      const category = UrlEngine.getCategories().find(cat => cat.id === (entry.categoryId || UrlEngine.suggestCategory(entry.url)));
+      row.innerHTML = `<div class="url-manager-item-main"><strong>${esc(entry.name)}</strong><span>${esc(entry.url)}</span><small>${esc(category?.label || 'Uncategorized')}${entry.tags?.length ? ` · ${esc(entry.tags.join(', '))}` : ''}</small></div>`;
+      const actions = document.createElement('div');
+      actions.className = 'url-manager-item-actions';
+      const pin = document.createElement('button');
+      pin.type = 'button'; pin.className = 'btn'; pin.textContent = entry.favorite ? '★' : '☆'; pin.title = entry.favorite ? 'Unpin' : 'Pin to dashboard';
+      pin.addEventListener('click', () => toggleFavorite(entry.url));
+      const edit = document.createElement('button');
+      edit.type = 'button'; edit.className = 'btn'; edit.textContent = 'Edit'; edit.addEventListener('click', () => editUrl(entry.url));
+      const remove = document.createElement('button');
+      remove.type = 'button'; remove.className = 'btn'; remove.textContent = 'Remove'; remove.addEventListener('click', () => removeUrl(entry.url));
+      actions.append(pin, edit, remove);
+      row.prepend(favEl(entry));
+      row.append(actions);
+      list.append(row);
+    });
+  }
+
+  async function toggleFavorite(url) {
+    const next = entries.map(entry => entry.url === url ? { ...entry, favorite: !entry.favorite } : entry);
+    await saveUrlEntries(next);
+    renderDashboard();
+  }
+
+  async function editUrl(url) {
+    const entry = entries.find(item => item.url === url);
+    if (!entry) return;
+    const name = prompt('Bookmark name:', entry.title || entry.name);
+    if (name === null) return;
+    const currentCategory = UrlEngine.getCategories().find(cat => cat.id === (entry.categoryId || UrlEngine.suggestCategory(entry.url)))?.label || '';
+    const categoryName = prompt('Category:', currentCategory);
+    if (categoryName === null) return;
+    let category = UrlEngine.getCategories().find(cat => cat.label.toLowerCase() === categoryName.trim().toLowerCase());
+    if (categoryName.trim() && !category) category = await createCategory(categoryName.trim());
+    const tags = prompt('Tags, separated by commas:', (entry.tags || []).join(', '));
+    if (tags === null) return;
+    const updated = entries.map(item => item.url === url ? {
+      ...item,
+      title: name.trim(),
+      name: name.trim() || item.name,
+      categoryId: category?.id || '',
+      categoryLabel: category?.label || '',
+      tags: tags.split(',').map(tag => tag.trim()).filter(Boolean)
+    } : item);
+    await saveUrlEntries(updated);
+    renderDashboard();
+  }
+
+  async function removeUrl(url) {
+    if (!confirm('Remove this URL from your list?')) return;
+    await saveUrlEntries(entries.filter(entry => entry.url !== url));
+    recentUrls = recentUrls.filter(item => item !== url);
+    await browserStore.set({ recentUrls });
+    renderDashboard();
+  }
+
+  async function createCategory(label) {
+    const id = label.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 32);
+    if (!id) return null;
+    let category = UrlEngine.getCategories().find(item => item.id === id);
+    if (category) return category;
+    category = { id, label, key: label.toLowerCase(), triggers: [label.toLowerCase()], verbs: [], hosts: [] };
+    customCategories.push(category);
+    UrlEngine.setCustomCategories(customCategories);
+    await browserStore.set({ userCategories: customCategories });
+    refreshCategoryControls();
+    return category;
+  }
+
+  async function addCustomCategory() {
+    const input = $('#newCategoryInput');
+    const label = input.value.trim();
+    if (!label) return toast('Enter a category name.');
+    const before = customCategories.length;
+    const category = await createCategory(label);
+    input.value = '';
+    renderUrlManager();
+    toast(customCategories.length > before ? `Added ${category.label}.` : `${category.label} already exists.`);
+  }
+
+  function renderDashboard() {
+    const grid = $('#dashboardGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    const query = ($('#dashboardSearch')?.value || '').trim().toLowerCase();
+    const byUrl = new Map(entries.map(entry => [entry.url, entry]));
+    const ordered = [
+      ...entries.filter(entry => entry.favorite),
+      ...recentUrls.map(url => byUrl.get(url)).filter(Boolean)
+    ].filter((entry, index, all) => all.findIndex(other => other.url === entry.url) === index)
+      .filter(entry => !query || `${entry.name} ${entry.url} ${entry.tags.join(' ')}`.toLowerCase().includes(query));
+    if (!ordered.length) {
+      grid.innerHTML = '<p class="muted">Pin a site or open a URL to see it here.</p>';
+      return;
+    }
+    ordered.forEach(entry => {
+      const tile = document.createElement('button');
+      tile.type = 'button'; tile.className = 'bookmark-tile';
+      tile.append(favEl(entry));
+      const name = document.createElement('strong'); name.textContent = entry.name;
+      const host = document.createElement('span'); host.textContent = entry.host;
+      const pin = document.createElement('small'); pin.textContent = entry.favorite ? 'Pinned' : 'Recently opened';
+      tile.append(name, host, pin);
+      tile.addEventListener('click', async () => {
+        const result = await openUrls([entry.url]);
+        if (result.opened.length) toast(`Opened ${entry.name}.`);
+      });
+      grid.append(tile);
+    });
+  }
+
+  function openDashboard() {
+    renderDashboard();
+    $('#dashboardDlg').showModal();
   }
 
   function updateSubtitle() {
@@ -294,6 +486,7 @@
         window.open(url, '_blank', 'noopener,noreferrer');
         opened.push(url);
       }
+      await rememberOpened(opened);
       return { opened, blocked };
     }
 
@@ -325,7 +518,15 @@
       opened.push(url);
     }
 
+    await rememberOpened(opened);
     return { opened, blocked };
+  }
+
+  async function rememberOpened(urls) {
+    if (!urls.length) return;
+    recentUrls = [...new Set([...urls, ...recentUrls])].slice(0, 30);
+    await browserStore.set({ recentUrls });
+    renderDashboard();
   }
 
   /* ------------------------------------------------------------ rendering */
@@ -522,7 +723,14 @@
       b.setAttribute('aria-label', `Open ${it.name}`);
       b.addEventListener('click', () => openFromItem(chat, it));
 
-      row.append(b);
+      const pin = document.createElement('button');
+      pin.className = 'item-pin';
+      pin.type = 'button';
+      pin.textContent = it.favorite ? '★' : '☆';
+      pin.title = it.favorite ? 'Unpin bookmark' : 'Pin bookmark';
+      pin.addEventListener('click', () => toggleFavorite(it.url));
+
+      row.append(pin, b);
       sc.append(row);
     });
 
@@ -1184,7 +1392,93 @@
     await loadEntries();
 
     $('#srcStatus').textContent =
-      `Using ${source}: ${entries.length} URL${entries.length === 1 ? '' : 's'} loaded. The bot opens URLs from this list only.`;
+      `Using ${source}: ${entries.length} URL${entries.length === 1 ? '' : 's'} loaded. Added URLs are saved in this browser. Download curl.txt to keep or share the updated list.`;
+    renderUrlManager();
+  }
+
+  async function readCurlSource() {
+    const saved = await browserStore.get(['curlText']);
+    if (typeof saved.curlText === 'string') return saved.curlText;
+    const response = await fetch(assetUrl('curl.txt'), { cache: 'no-store' });
+    if (!response.ok) throw new Error('Could not load the bundled curl.txt file.');
+    return response.text();
+  }
+
+  function updateCategoryHint() {
+    const input = $('#addUrlInput').value.trim();
+    const hint = $('#addUrlHint');
+    if (!input) {
+      hint.textContent = "Enter a URL and I'll suggest a category.";
+      return;
+    }
+    const selected = UrlEngine.getCategories().find(item => item.id === $('#addUrlCategory').value);
+    if (selected) {
+      hint.textContent = `Selected category: ${selected.label}.`;
+      return;
+    }
+    const detected = UrlEngine.suggestCategory(input);
+    const cat = UrlEngine.getCategories().find(item => item.id === detected);
+    hint.textContent = cat
+      ? `Suggested category: ${cat.label}. You can change it above.`
+      : 'No category detected. Choose one above or select Other.';
+  }
+
+  async function addUrl() {
+    const input = $('#addUrlInput');
+    let url;
+    try {
+      url = new URL(input.value.trim());
+      if (!['http:', 'https:'].includes(url.protocol)) throw new Error();
+      url.hash = '';
+    } catch {
+      toast('Enter a valid http:// or https:// URL.');
+      input.focus();
+      return;
+    }
+    const normalized = url.href;
+    await loadEntries();
+    const key = value => value.replace(/\/$/, '').toLowerCase();
+    if (entries.some(entry => key(entry.url) === key(normalized))) {
+      toast('That URL is already in your list.');
+      return;
+    }
+
+    const selected = $('#addUrlCategory').value;
+    const categoryId = selected || UrlEngine.suggestCategory(normalized) || 'other';
+    const category = UrlEngine.getCategories().find(item => item.id === categoryId) || UrlEngine.getCategories().find(item => item.id === 'other');
+    try {
+      const parsed = UrlEngine.parseCurl(`curl "${normalized}"`)[0];
+      parsed.categoryId = category.id;
+      parsed.categoryLabel = category.label;
+      parsed.title = $('#addUrlTitle').value.trim();
+      parsed.tags = $('#addUrlTags').value.split(',').map(tag => tag.trim()).filter(Boolean);
+      await saveUrlEntries([...entries, parsed]);
+      input.value = '';
+      $('#addUrlTitle').value = '';
+      $('#addUrlTags').value = '';
+      $('#addUrlCategory').value = '';
+      await updateSrcStatus();
+      renderAll();
+      updateCategoryHint();
+      toast(`Added to ${category.label}.`);
+    } catch (error) {
+      toast(error.message || 'Could not save this URL.');
+    }
+  }
+
+  async function downloadCurl() {
+    try {
+      const text = await readCurlSource();
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'curl.txt';
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      toast('Downloaded curl.txt');
+    } catch (error) {
+      toast(error.message || 'Could not download curl.txt.');
+    }
   }
 
   function openSettings() {
@@ -1305,6 +1599,7 @@
     settings = { ...DEFAULTS, ...(st.settings || {}) };
 
     await loadEntries();
+    refreshCategoryControls();
 
     renderAll();
 
@@ -1345,6 +1640,14 @@
 
     $('#chatSearch').addEventListener('input', renderSidebar);
     $('#btnSettings').addEventListener('click', openSettings);
+    $('#btnBookmarks').addEventListener('click', openDashboard);
+    $('#btnDashboard').addEventListener('click', openDashboard);
+    $('#btnCloseDashboard').addEventListener('click', () => $('#dashboardDlg').close());
+    $('#dashboardSearch').addEventListener('input', renderDashboard);
+    $('#urlManagerSearch').addEventListener('input', renderUrlManager);
+    $('#urlManagerCategory').addEventListener('change', renderUrlManager);
+    $('#urlManagerProtocol').addEventListener('change', renderUrlManager);
+    $('#btnAddCategory').addEventListener('click', addCustomCategory);
 
     const input = $('#input');
 
@@ -1404,6 +1707,11 @@
     $('#btnImport').addEventListener('click', () => {
       $('#fileImport').click();
     });
+
+    $('#addUrlInput').addEventListener('input', updateCategoryHint);
+    $('#addUrlCategory').addEventListener('change', updateCategoryHint);
+    $('#btnAddUrl').addEventListener('click', addUrl);
+    $('#btnExportCurl').addEventListener('click', downloadCurl);
 
     $('#fileImport').addEventListener('change', async e => {
       const f = e.target.files[0];

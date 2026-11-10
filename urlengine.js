@@ -33,23 +33,38 @@
 
   function parseCurl(text) {
     const out = [], seen = new Set();
+    let nextMeta = {};
     for (const raw of String(text || '').split(/\r?\n/)) {
       const line = raw.trim();
-      if (!line || line.startsWith('#')) continue;
+      if (!line) continue;
+      if (line.startsWith('#')) {
+        const category = line.match(/^#\s*category\s*:\s*([a-z0-9_-]+)/i);
+        const categoryLabel = line.match(/^#\s*category-label\s*:\s*(.+)$/i);
+        const name = line.match(/^#\s*name\s*:\s*(.+)$/i);
+        const tags = line.match(/^#\s*tags\s*:\s*(.*)$/i);
+        const favorite = line.match(/^#\s*favorite\s*:\s*(true|false)/i);
+        if (category) nextMeta.categoryId = category[1].toLowerCase();
+        if (categoryLabel) nextMeta.categoryLabel = categoryLabel[1].trim();
+        if (name) nextMeta.title = name[1].trim();
+        if (tags) nextMeta.tags = tags[1].split(',').map(tag => tag.trim()).filter(Boolean);
+        if (favorite) nextMeta.favorite = favorite[1].toLowerCase() === 'true';
+        continue;
+      }
       const m = line.match(/https?:\/\/[^\s"'<>]+/i);
-      if (!m) continue;
+      if (!m) { nextMeta = {}; continue; }
       const url = m[0].replace(/[),;]+$/, '');
       let u;
       try { u = new URL(url); } catch (e) { continue; }
       const key = u.href.replace(/\/$/, '').toLowerCase();
-      if (seen.has(key)) continue;
+      if (seen.has(key)) { nextMeta = {}; continue; }
       seen.add(key);
       const host = u.hostname.toLowerCase().replace(/^www\./, '');
       let { main, sub } = splitHost(host);
       if (GENERIC_SUB.has(sub)) sub = '';
       let name = DISPLAY[main] || capital(main);
       if (sub) name += ' ' + sub.split('.').map(capital).join(' ');
-      out.push({ url, host, main, sub, name, nameKey: name.toLowerCase().replace(/[^a-z0-9]/g, '') });
+      out.push({ url, host, main, sub, name, categoryId: nextMeta.categoryId || '', categoryLabel: nextMeta.categoryLabel || '', title: nextMeta.title || '', tags: nextMeta.tags || [], favorite: !!nextMeta.favorite, nameKey: (nextMeta.title || name).toLowerCase().replace(/[^a-z0-9]/g, '') });
+      nextMeta = {};
     }
     return out;
   }
@@ -65,7 +80,7 @@
     ytmusic: ['music.youtube'], spotify: ['spotify'], hotmail: ['outlook', 'live.com'], bard: ['gemini'], steam: ['steam']
   };
 
-  const CATS = [
+  const BUILTIN_CATS = [
     { id: 'video', label: 'Video', key: 'video', triggers: ['video', 'movie', 'film', 'tv', 'series', 'stream', 'streaming', 'clip', 'anime', 'cinema', 'trailer'], verbs: ['watch', 'watching'],
       hosts: ['youtube', 'vimeo', 'dailymotion', 'twitch', 'netflix', 'primevideo', 'hotstar', 'disneyplus', 'hulu', 'hbomax', 'max.com', 'tiktok', 'peacocktv', 'crunchyroll', 'bilibili', 'rumble', 'ted.com', 'jiocinema', 'zee5', 'sonyliv', 'mxplayer', 'paramountplus', 'appletv', 'imdb', 'vevo'] },
     { id: 'search', label: 'Search engines', key: 'search engine', triggers: ['search engine', 'web search', 'browse', 'internet'], verbs: [],
@@ -103,8 +118,14 @@
     { id: 'weather', label: 'Weather', key: 'weather', triggers: ['forecast', 'temperature', 'rain'], verbs: ['weather'],
       hosts: ['weather', 'accuweather', 'wunderground', 'windy.com', 'imd.gov'] },
     { id: 'health', label: 'Health', key: 'health', triggers: ['health', 'medical', 'doctor', 'medicine', 'symptom', 'fitness'], verbs: [],
-      hosts: ['webmd', 'mayoclinic', 'nih.gov', 'who.int', 'healthline', 'practo', '1mg', 'cdc.gov'] }
+      hosts: ['webmd', 'mayoclinic', 'nih.gov', 'who.int', 'healthline', 'practo', '1mg', 'cdc.gov'] },
+    { id: 'other', label: 'Other', key: 'other', triggers: ['other', 'miscellaneous'], verbs: [], hosts: [] }
   ];
+  let customCats = [];
+  const getCategories = () => [...BUILTIN_CATS, ...customCats];
+  const setCustomCategories = list => {
+    customCats = (Array.isArray(list) ? list : []).filter(cat => cat && cat.id && cat.label);
+  };
 
   function hostHas(e, f) {
     const h = e.host;
@@ -113,7 +134,17 @@
     if (f.length <= 4) return e.main === f;
     return h.includes(f);
   }
-  const inCat = (e, cat) => cat.hosts.some(f => hostHas(e, f));
+  const inCat = (e, cat) => e.categoryId === cat.id || cat.hosts.some(f => hostHas(e, f));
+
+  function suggestCategory(url) {
+    const entry = parseCurl(`curl "${url}"`)[0];
+    if (!entry) return null;
+    const cats = getCategories();
+    const match = cats.find(cat => cat.hosts.some(host => hostHas(entry, host)));
+    if (match) return match.id;
+    const words = ` ${entry.host} ${new URL(entry.url).pathname} `.toLowerCase().replace(/[^a-z0-9]+/g, ' ');
+    return cats.find(cat => cat.triggers.some(word => words.includes(` ${word} `) || words.includes(` ${word}s `)))?.id || '';
+  }
 
   /* ---------- text helpers ---------- */
   const NOSTEM = new Set(['news', 'this', 'chess', 'tennis', 'focus', 'bus', 'plus', 'gas']);
@@ -176,7 +207,7 @@
     const padded = ' ' + norm.split(' ').map(stem).join(' ') + ' ';
     const hasIntent = INTENT.test(norm);
     const found = [];
-    for (const cat of CATS) {
+    for (const cat of getCategories()) {
       let hits = 0, self = false;
       for (const t of cat.triggers) if (padded.includes(' ' + stemPhrase(t) + ' ')) hits++;
       for (const v of cat.verbs) if (padded.includes(' ' + stemPhrase(v) + ' ')) { hits++; self = true; }
@@ -188,7 +219,7 @@
   }
 
   /* ---------- responses ---------- */
-  const toItem = e => ({ name: e.name, url: e.url, host: e.host });
+  const toItem = e => ({ name: e.name, url: e.url, host: e.host, favorite: e.favorite });
   const listResp = (text, es, extra) => Object.assign({ text, items: es.map(toItem), lastList: es.map(e => e.url), pending: null }, extra || {});
   const nameOf = (entries, url) => (entries.find(e => e.url === url) || {}).name || url;
   const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
@@ -263,13 +294,13 @@
         const n = new Set(entries.filter(e => cats.some(c => inCat(e, c))).map(e => e.url)).size;
         return { text: `There ${n === 1 ? 'is' : 'are'} **${n}** ${cats.map(c => c.label.toLowerCase()).join(' / ')} URL${n === 1 ? '' : 's'} in curl.txt (out of ${entries.length} total).`, pending: null, chips: [{ label: 'List them', send: `list ${cats[0].key} urls` }] };
       }
-      const by = CATS.map(c => [c.label, entries.filter(e => inCat(e, c)).length]).filter(x => x[1]).sort((a, b) => b[1] - a[1]).slice(0, 6);
+      const by = getCategories().map(c => [c.label, entries.filter(e => inCat(e, c)).length]).filter(x => x[1]).sort((a, b) => b[1] - a[1]).slice(0, 6);
       return { text: `curl.txt contains **${entries.length}** URL${entries.length === 1 ? '' : 's'}.` + (by.length ? `\n\nLargest categories: ${by.map(x => `${x[0]} (${x[1]})`).join(', ')}.` : ''), pending: null, chips: [{ label: 'List all URLs', send: 'list all urls' }, { label: 'Show categories', send: 'show categories' }] };
     }
 
     // 5. categories overview
     if (/\bcategor(y|ies)\b/.test(norm) || /\bwhat (kind|type)s? of (sites?|urls?|links?|websites?)\b/.test(norm)) {
-      const rows = CATS.map(c => ({ c, n: entries.filter(e => inCat(e, c)).length })).filter(r => r.n);
+      const rows = getCategories().map(c => ({ c, n: entries.filter(e => inCat(e, c)).length })).filter(r => r.n);
       if (!rows.length) return { text: 'I couldn’t group any of the URLs in curl.txt into categories yet. Try **list all URLs**.', pending: null };
       return { text: 'Here’s what curl.txt covers:\n\n' + rows.map(r => `- **${r.c.label}**: ${r.n}`).join('\n') + '\n\nPick one, or just tell me what you want to do.', pending: null, chips: rows.slice(0, 8).map(r => ({ label: r.c.label, send: `list ${r.c.key} urls` })) };
     }
@@ -326,7 +357,7 @@
     return null; // not URL-related, so let the LLM answer
   }
 
-  const api = { parseCurl, handle, CATS, hostHas };
+  const api = { parseCurl, handle, getCategories, setCustomCategories, hostHas, suggestCategory };
   root.UrlEngine = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

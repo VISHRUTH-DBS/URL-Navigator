@@ -40,6 +40,7 @@
           <h1 id="chatTitle">New chat</h1>
           <p id="chatSub">URL Navigator</p>
         </div>
+        <button class="btn" id="btnBookmarks" type="button">Bookmarks</button>
         <button class="icon-btn" id="btnChatMenu" title="Chat options" aria-label="Chat options" data-icon="more"></button>
       </header>
 
@@ -59,6 +60,15 @@
   <div id="toast" class="toast" hidden></div>
 
   <dialog id="dlg"></dialog>
+
+  <dialog id="dashboardDlg">
+    <div class="dlg-card wide">
+      <div class="url-manager-head"><h3>Bookmarks</h3><button type="button" class="btn" id="btnCloseDashboard">Close</button></div>
+      <p class="muted">Pinned sites and recently opened links.</p>
+      <input id="dashboardSearch" class="field" type="search" placeholder="Search bookmarks">
+      <div id="dashboardGrid" class="bookmark-grid"></div>
+    </div>
+  </dialog>
 
   <dialog id="settingsDlg">
     <div class="dlg-card wide">
@@ -86,6 +96,36 @@
 
       <h4>URL source</h4>
       <p id="srcStatus" class="muted"></p>
+      <label class="lbl" for="addUrlInput">Add a website URL</label>
+      <input id="addUrlInput" class="field" type="url" inputmode="url" placeholder="https://example.com" autocomplete="url">
+      <label class="lbl" for="addUrlCategory">Category</label>
+      <select id="addUrlCategory" class="field"><option value="">Auto-detect category</option></select>
+      <p id="addUrlHint" class="muted small">Enter a URL and I’ll suggest a category.</p>
+      <label class="lbl" for="addUrlTitle">Name <span class="muted">(optional)</span></label>
+      <input id="addUrlTitle" class="field" type="text" placeholder="My website">
+      <label class="lbl" for="addUrlTags">Tags <span class="muted">(comma separated)</span></label>
+      <input id="addUrlTags" class="field" type="text" placeholder="favorite, research">
+      <div class="row url-actions">
+        <button type="button" class="btn primary" id="btnAddUrl">Add URL</button>
+        <button type="button" class="btn" id="btnExportCurl">Download curl.txt</button>
+      </div>
+      <div class="url-manager-head">
+        <h4>Manage URL list</h4>
+        <button type="button" class="btn" id="btnDashboard">Open dashboard</button>
+      </div>
+      <input id="urlManagerSearch" class="field" type="search" placeholder="Search name, URL, or tag">
+      <div class="url-manager-filters">
+        <select id="urlManagerCategory" class="field" aria-label="Filter by category"></select>
+        <select id="urlManagerProtocol" class="field" aria-label="Filter by URL type">
+          <option value="">All URL types</option><option value="https:">HTTPS</option><option value="http:">HTTP</option>
+        </select>
+      </div>
+      <div id="urlManagerList" class="url-manager-list"></div>
+      <label class="lbl" for="newCategoryInput">Add a custom category</label>
+      <div class="url-manager-filters">
+        <input id="newCategoryInput" class="field" type="text" placeholder="e.g. Research">
+        <button type="button" class="btn" id="btnAddCategory">Add category</button>
+      </div>
       <div class="row">
         <button type="button" class="btn" id="btnImport">Import curl.txt…</button>
         <button type="button" class="btn" id="btnBundled">Use bundled file</button>
