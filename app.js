@@ -201,7 +201,7 @@
   const DEFAULTS = {
     provider: 'groq',
     apiKey: '',
-    model: 'llama-3.3-70b-versatile',
+    model: 'openai/gpt-oss-120b',
     baseUrl: 'https://api.groq.com/openai/v1'
   };
 
@@ -1377,7 +1377,7 @@
   const PROVIDER_DEFAULT_MODEL = {
     anthropic: 'claude-sonnet-5-5',
     openai: 'gpt-4o-mini',
-    groq: 'llama-3.3-70b-versatile',
+    groq: 'openai/gpt-oss-120b',
     compatible: 'your-model-name'
   };
 
@@ -1597,6 +1597,10 @@
       : null;
 
     settings = { ...DEFAULTS, ...(st.settings || {}) };
+    if (settings.provider === 'groq' && settings.model === 'llama-3.3-70b-versatile') {
+      settings.model = DEFAULTS.model;
+      await browserStore.set({ settings });
+    }
 
     await loadEntries();
     refreshCategoryControls();

@@ -56,8 +56,8 @@ button { cursor: pointer; }
 
 /* ---------- app rail ---------- */
 .rail { width: 68px; flex: none; background: var(--rail); display: flex; flex-direction: column; align-items: center; padding: 10px 0; gap: 4px; }
-.rail-logo { width: 36px; height: 36px; margin-bottom: 10px; color: var(--accent); }
-.rail-logo svg { width: 36px; height: 36px; }
+.rail-logo { width: 36px; height: 36px; margin-bottom: 10px; }
+.rail-logo img { width: 100%; height: 100%; object-fit: contain; }
 .rail-btn { position: relative; width: 56px; padding: 6px 0 4px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .rail-btn small { font-size: 11px; }
 .rail-btn:hover { background: var(--hover); }
@@ -98,8 +98,8 @@ button { cursor: pointer; }
 /* ---------- main ---------- */
 .main { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--main); }
 .m-head { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--line); min-height: 60px; }
-.m-av { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; flex: none; }
-.m-av svg { width: 20px; height: 20px; }
+.m-av { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; flex: none; }
+.m-av img { width: 100%; height: 100%; object-fit: contain; }
 .m-title { flex: 1; min-width: 0; }
 .m-title h1 { margin: 0; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .m-title p { margin: 0; font-size: 12px; color: var(--muted); }
